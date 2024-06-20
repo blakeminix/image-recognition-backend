@@ -1,8 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
-import tensorflow as tf
-from PIL import Image
 from dotenv import load_dotenv
 import boto3
 import uuid
@@ -29,11 +27,12 @@ s3_client = boto3.client(
 
 def initiate_processing(filename):
     try:
+        print(f'Initiating processing for {filename}')
         response = requests.post(
             f'{KUBERNETES_SERVICE_URL}/process_image',
-            json={'filename': filename}
+            json={'filename': filename},
         )
-
+        print(f'Response received for {filename}')
         if response.status_code == 200:
             print('Processing initiated successfully.')
         else:
