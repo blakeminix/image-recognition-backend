@@ -27,6 +27,20 @@ s3_client = boto3.client(
     aws_secret_access_key=SECRET_ACCESS_KEY,
 )
 
+MODEL_FILE_KEY = 'image_recognition_model_cifar100.h5'
+MODEL_LOCAL_PATH = 'image_recognition_model_cifar100.h5'
+
+def download_model():
+    if not os.path.exists(MODEL_LOCAL_PATH):
+        try:
+            s3_client.download_file(S3_BUCKET, MODEL_FILE_KEY, MODEL_LOCAL_PATH)
+            print(f'Model downloaded from S3 to {MODEL_LOCAL_PATH}')
+        except Exception as e:
+            print(f'Error downloading model: {e}')
+
+download_model()
+
+# TF model
 model = tf.keras.models.load_model('image_recognition_model_cifar100.h5')
 
 # Model's labels
